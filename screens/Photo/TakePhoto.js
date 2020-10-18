@@ -1,6 +1,8 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
 import styled from "styled-components";
+import { TouchableOpacity } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const View = styled.View`
   justify-content: center;
@@ -10,9 +12,9 @@ const View = styled.View`
 
 const Text = styled.Text``;
 
-export default ({ navigation }) => (
+export default ({ navigation: { navigate } }) => (
     <View>
-        <TouchableOpacity onPress={() => navigation.navigate("UploadPhoto")}>
+        <TouchableOpacity onPress={() => navigate("UploadPhoto")}>
             <Text>Take</Text>
         </TouchableOpacity>
     </View>

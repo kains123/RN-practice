@@ -3,14 +3,14 @@ import { createStackNavigator, createAppContainer } from '@react-navigation/stac
 import TabNavigation from "./TabNavigation";
 import PhotoNavigation from "./PhotoNavigation";
 
-const Stack = createStackNavigator();
+const MainNavigation = createStackNavigator();
 
 export default () => (
-    <Stack.Navigator headerMode="none">
-        <Stack.Screen name="TabNavigation" component={TabNavigation}></Stack.Screen>
-        <Stack.Screen
+    <MainNavigation.Navigator headerMode="none" mode="modal">
+        <MainNavigation.Screen name="TabNavigation" component={TabNavigation}></MainNavigation.Screen>
+        <MainNavigation.Screen
             name="PhotoNavigation"
             component={PhotoNavigation}
-        ></Stack.Screen>
-    </Stack.Navigator>
+        ></MainNavigation.Screen>
+    </MainNavigation.Navigator>
 );

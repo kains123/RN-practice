@@ -60,14 +60,14 @@ export default () => (
         <Tab.Screen
             name="Add"
             component={View}
-        // listeners={({ navigation, route }) => ({
-        //     tabPress: (e) => {
-        //         // Prevent default action
-        //         e.preventDefault();
-        //         // Do something with the `navigation` object
-        //         navigation.navigate("PhotoNavigation");
-        //     },
-        // })}
+            listeners={({ navigation, route }) => ({
+                tabPress: (e) => {
+                    // Prevent default action
+                    e.preventDefault();
+                    // Do something with the `navigation` object
+                    navigation.navigate("PhotoNavigation");
+                },
+            })}
         />
         <Tab.Screen name="Notifications" component={NotificationsStack} />
         <Tab.Screen name="Profile" component={ProfileStack} />
