@@ -1,75 +1,66 @@
-import * as React from 'react';
-import { View, Text, TouchableOpacity } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React from "react";
+import { View } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import Home from "../screens/Tabs/Home";
+import Profile from "../screens/Tabs/Profile";
+import Search from "../screens/Tabs/Search";
+import Notifications from "../screens/Tabs/Notifications";
+import MessagesLink from "../components/MessagesLink";
 
-import Home from "../screens/Home";
-import Search from "../screens/Search.js";
-import Notifications from "../screens/Notifications";
-import Profile from "../screens/Profile";
-
-const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function HomeStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{
-                    headerRight: () => (
-                        <TouchableOpacity>
-                        </TouchableOpacity>
-                    ),
-                }}
-            />
-        </Stack.Navigator>
-    );
-}
-
-function SearchStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Search" component={Search} />
-        </Stack.Navigator>
-    );
-}
-
-function NotificationsStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Notifications" component={Notifications} />
-        </Stack.Navigator>
-    );
-}
-
-function ProfileStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Profile" component={Profile} />
-        </Stack.Navigator>
-    );
-}
+const stackFactory = (initialRoute, name, customConfig) => (
+    <Stack.Navigator>
+        <Stack.Screen
+            name={name}
+            component={initialRoute}
+            options={{ ...customConfig }}
+        />
+    </Stack.Navigator>
+);
 
 export default () => (
     <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeStack} />
-        <Tab.Screen name="Search" component={SearchStack} />
+        <Tab.Screen name="Home">
+            {() =>
+                stackFactory(Home, "Home", {
+                    title: "Home",
+                    headerRight: () => <MessagesLink />,
+                })
+            }
+        </Tab.Screen>
+        <Tab.Screen name="Search">
+            {() =>
+                stackFactory(Search, "Search", {
+                    title: "Search",
+                })
+            }
+        </Tab.Screen>
         <Tab.Screen
             name="Add"
             component={View}
-            listeners={({ navigation, route }) => ({
+            listeners={({ navigation }) => ({
                 tabPress: (e) => {
-                    // Prevent default action
                     e.preventDefault();
-                    // Do something with the `navigation` object
                     navigation.navigate("PhotoNavigation");
                 },
             })}
         />
-        <Tab.Screen name="Notifications" component={NotificationsStack} />
-        <Tab.Screen name="Profile" component={ProfileStack} />
+        <Tab.Screen name="Notifications">
+            {() =>
+                stackFactory(Notifications, "Notifications", {
+                    title: "Notifications",
+                })
+            }
+        </Tab.Screen>
+        <Tab.Screen name="Profile">
+            {() =>
+                stackFactory(Profile, "Profile", {
+                    title: "Profile",
+                })
+            }
+        </Tab.Screen>
     </Tab.Navigator>
 );
