@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import constants from "../constants";
+import { ActivityIndicator } from "react-native";
 
 const Touchable = styled.TouchableOpacity``;
 
@@ -20,16 +21,16 @@ const Text = styled.Text`
 `;
 
 const AuthButton = ({ text, onPress }) => (
-    <Touchable onPress={onPress}>
-        <Container>
-            <Text>{text}</Text>
-        </Container>
-    </Touchable>
+  <Touchable onPress={onPress}>
+    <Container>
+      <Text>{text}</Text>
+    </Container>
+  </Touchable>
 );
 
 AuthButton.propTypes = {
-    text: PropTypes.string.isRequired,
-    onPress: PropTypes.func.isRequired
+  text: PropTypes.string.isRequired,
+  onPress: PropTypes.func.isRequired
 };
 
 export default AuthButton;
