@@ -1,37 +1,39 @@
+
 import React, { useState } from "react";
-import styled from "styled-components/native";
-import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
-import AuthInput from "../../components/AuthInput";
-import AuthButton from "../../components/AuthButton";
-import useInput from "../../hooks/useInput";
+import styled from "styled-components";
+import { Alert, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useMutation } from "react-apollo-hooks";
-import { LOG_IN, CONFIRM_SECRET } from "./AuthQueries";
-import { useLogIn } from "../../AuthContext";
+import AuthButton from "../../components/AuthButton";
+import AuthInput from "../../components/AuthInput";
+import useInput from "../../hooks/useInput";
+import { LOG_IN } from "./AuthQueries";
 
 const View = styled.View`
-  justify-content: center;
-  align-items: center;
-  flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 `;
 
 const Text = styled.Text``;
 
-export default ({ navigation }) => {
-  const emailInput = useInput("");
+export default ({ route, navigation }) => {
+  const emailInput = useInput(route.params ? route.params.email : "");
   const [loading, setLoading] = useState(false);
   const [requestSecretMutation] = useMutation(LOG_IN, {
     variables: {
       email: emailInput.value,
     },
   });
+
   const handleLogin = async () => {
     const { value } = emailInput;
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
     if (value === "") {
-      return Alert.alert("Email 입력란이 비어있습니다.");
+      return Alert.alert("이메일을 입력해 주세요");
+    } else if (!value.includes("@") || !value.includes(".")) {
+      return Alert.alert("이메일 형식에 맞게 입력해 주세요");
     } else if (!emailRegex.test(value)) {
-      return Alert.alert("정확한 Email을 입력해 주세요.");
+      return Alert.alert("유효하지 않은 이메일입니다");
     }
     try {
       setLoading(true);
@@ -39,15 +41,15 @@ export default ({ navigation }) => {
         data: { requestSecret },
       } = await requestSecretMutation();
       if (requestSecret) {
-        Alert.alert("Email을 확인해 주세요.");
+        Alert.alert("이메일로 시크릿이 발송되었습니다");
         navigation.navigate("Confirm", { email: value });
       } else {
-        Alert.alert("가입되지 않은 Email 입니다.");
+        Alert.alert("계정을 찾을 수 없습니다");
         navigation.navigate("Signup", { email: value });
       }
     } catch (e) {
       console.log(e);
-      Alert.alert("지금은 로그인할 수 없습니다.");
+      Alert.alert("로그인 할 수 없습니다");
     } finally {
       setLoading(false);
     }
@@ -57,13 +59,13 @@ export default ({ navigation }) => {
       <View>
         <AuthInput
           {...emailInput}
-          placeholder="Email"
+          placeholder="이메일"
           keyboardType="email-address"
           returnKeyType="send"
           onSubmitEditing={handleLogin}
           autoCorrect={false}
         />
-        <AuthButton loading={loading} onPress={handleLogin} text="로그인" />
+        <AuthButton loading={loading} text="Log In" onPress={handleLogin} />
       </View>
     </TouchableWithoutFeedback>
   );
